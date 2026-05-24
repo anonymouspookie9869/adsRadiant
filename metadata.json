@@ -1,0 +1,6 @@
+{
+  "name": "AdsRadiant Performance Marketing",
+  "description": "Premium landing page for AdsRadiant - A high-performance app growth and AI-powered UA marketing agency.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
