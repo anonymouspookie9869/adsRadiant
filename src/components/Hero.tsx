@@ -130,13 +130,23 @@ export default function Hero({ onOpenBooking }: HeroProps) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* LEFT SIDE: Core Pitch copy */}
-          <div className="lg:col-span-7 text-left space-y-6 md:space-y-8">
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 text-left space-y-6 md:space-y-8"
+          >
             
             {/* Tag badge with animated pulse */}
-            <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-bold uppercase tracking-widest shadow-sm">
+            <motion.div 
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-bold uppercase tracking-widest shadow-sm"
+            >
               <span className="flex h-2 w-2 rounded-full bg-indigo-500" />
               <span>Next-Gen Performance Marketing</span>
-            </div>
+            </motion.div>
 
             <div className="space-y-6">
               <h1 className="font-sans text-5xl sm:text-6xl md:text-7xl font-bold leading-[0.95] tracking-tight bg-gradient-to-b from-white to-slate-400 bg-clip-text text-transparent">
@@ -211,10 +221,15 @@ export default function Hero({ onOpenBooking }: HeroProps) {
               </div>
             </div>
 
-          </div>
+          </motion.div>
 
           {/* RIGHT SIDE: Immersive Interactive KPI Dashboard Mockup */}
-          <div className="lg:col-span-5 relative">
+          <motion.div 
+            initial={{ opacity: 0, x: 50, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 relative"
+          >
             <div className="absolute -inset-10 bg-indigo-500/10 blur-[80px] rounded-full pointer-events-none" />
             <div className="relative bg-slate-900/60 backdrop-blur-2xl border border-white/10 rounded-[40px] p-8 shadow-2xl space-y-6">
               
@@ -349,7 +364,7 @@ export default function Hero({ onOpenBooking }: HeroProps) {
               </div>
 
             </div>
-          </div>
+          </motion.div>
 
         </div>
 

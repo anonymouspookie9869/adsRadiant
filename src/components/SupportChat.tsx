@@ -37,6 +37,22 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
   }, [isOpen]);
 
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isOpen) {
+          setIsOpen(false);
+        } else if (showNotification) {
+          setShowNotification(false);
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isOpen, showNotification]);
+
+  useEffect(() => {
     // Scroll to the bottom of the message container whenever messages update
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -176,12 +192,12 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
                   <ArrowRight className="w-3 h-3 animate-pulse" />
                 </div>
               </div>
-              <button 
+               <button 
                 onClick={(e) => {
                   e.stopPropagation();
                   setShowNotification(false);
                 }}
-                className="text-slate-500 hover:text-white transition-colors"
+                className="text-slate-500 hover:text-white transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
                 aria-label="Dismiss message"
               >
                 <X className="w-3.5 h-3.5" />
@@ -198,7 +214,7 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => (isOpen ? setIsOpen(false) : handleOpenChat())}
-          className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition-all duration-300 ${
+          className={`relative w-14 h-14 rounded-full flex items-center justify-center shadow-2xl cursor-pointer transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-[#030712] ${
             isOpen 
               ? 'bg-[#1e1b4b] text-white border border-white/10' 
               : 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-600/25 shadow-xl'
@@ -252,7 +268,7 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-1 px-1.5 rounded-full border border-white/5 hover:border-white/10 text-slate-400 hover:text-white transition-all cursor-pointer"
+                className="p-1 px-1.5 rounded-full border border-white/5 hover:border-white/10 text-slate-400 hover:text-white transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 aria-label="Minimize consultation portal"
               >
                 <X className="w-4 h-4" />
@@ -310,7 +326,7 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleSendMessage("Connect with a Senior growth architect! 🚀", true)}
-                    className="py-1 px-2.5 bg-indigo-600 hover:bg-indigo-550 text-white text-[10px] font-bold rounded-lg transition-colors flex items-center space-x-1 cursor-pointer"
+                    className="py-1 px-2.5 bg-indigo-600 hover:bg-indigo-550 text-white text-[10px] font-bold rounded-lg transition-colors flex items-center space-x-1 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-400"
                   >
                     <span>Schedule 1-on-1 Discovery Call</span>
                     <ArrowRight className="w-2.5 h-2.5" />
@@ -319,7 +335,7 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
                     whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.1)" }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleSendMessage("How do your UA models lower CPM benchmarks?", true)}
-                    className="py-1 px-2.5 bg-white/5 border border-white/5 text-slate-300 text-[10px] font-medium rounded-lg transition-colors cursor-pointer"
+                    className="py-1 px-2.5 bg-white/5 border border-white/5 text-slate-300 text-[10px] font-medium rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-400"
                   >
                     How do campaigns scale?
                   </motion.button>
@@ -327,7 +343,7 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
                     whileHover={{ scale: 1.03, backgroundColor: "rgba(255,255,255,0.1)" }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleSendMessage("What are your business operating hours?", true)}
-                    className="py-1 px-2.5 bg-white/5 border border-white/5 text-slate-300 text-[10px] font-medium rounded-lg transition-colors cursor-pointer"
+                    className="py-1 px-2.5 bg-white/5 border border-white/5 text-slate-300 text-[10px] font-medium rounded-lg transition-colors cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-400"
                   >
                     🕒 Business Hours
                   </motion.button>
@@ -348,12 +364,12 @@ export default function SupportChat({ onOpenBooking }: SupportChatProps) {
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="Type your growth puzzle..."
-                className="flex-1 bg-white/5 border border-white/5 focus:border-indigo-500 rounded-full py-2 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-all"
+                className="flex-1 bg-white/5 border border-white/5 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-all"
               />
               <button
                 type="submit"
                 disabled={!inputValue.trim()}
-                className="p-2 rounded-full bg-indigo-600 hover:bg-indigo-505 disabled:bg-white/5 disabled:text-slate-600 text-white transition-all cursor-pointer flex items-center justify-center shrink-0"
+                className="p-2 rounded-full bg-indigo-600 hover:bg-indigo-505 disabled:bg-white/5 disabled:text-slate-600 text-white transition-all cursor-pointer flex items-center justify-center shrink-0 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 aria-label="Send user chat text"
               >
                 <Send className="w-3.5 h-3.5" />

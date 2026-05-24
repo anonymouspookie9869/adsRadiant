@@ -9,6 +9,20 @@ interface NavbarProps {
 export default function Navbar({ onOpenBooking }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
+  React.useEffect(() => {
+    if (isOpen) {
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          setIsOpen(false);
+        }
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [isOpen]);
+
   const links = [
     { name: "Services", href: "#services" },
     { name: "Success Stories", href: "#case-studies" },
@@ -53,7 +67,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                   key={link.name}
                   href={link.href}
                   onClick={(e) => handleScroll(e, link.href)}
-                  className="hover:text-indigo-400 text-xs font-semibold tracking-widest transition-colors uppercase font-sans relative py-2 group"
+                  className="hover:text-indigo-400 text-xs font-semibold tracking-widest transition-colors uppercase font-sans relative py-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-505 rounded px-1.5"
                 >
                   {link.name}
                   <span className="absolute bottom-0 inset-x-0 h-[2px] bg-gradient-to-r from-indigo-500 to-cyan-400 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 transform origin-left" />
@@ -67,7 +81,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                 whileHover={{ scale: 1.05, boxShadow: "0 10px 25px -5px rgba(255, 255, 255, 0.15)" }}
                 whileTap={{ scale: 0.96 }}
                 onClick={onOpenBooking}
-                className="bg-white text-slate-950 px-6 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-widest transition-transform cursor-pointer"
+                className="bg-white text-slate-950 px-6 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-widest transition-transform cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
               >
                 Work With Us
               </motion.button>
@@ -77,7 +91,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
             <div className="flex md:hidden">
               <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="p-1.5 rounded-lg border border-white/5 text-slate-450 hover:text-white focus:outline-none transition-colors"
+                className="p-1.5 rounded-lg border border-white/5 text-slate-450 hover:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors"
                 aria-label="Toggle navigation menu"
               >
                 {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -102,7 +116,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                     key={link.name}
                     href={link.href}
                     onClick={(e) => handleScroll(e, link.href)}
-                    className="text-slate-300 hover:text-indigo-400 text-xs font-bold uppercase tracking-wider transition-colors"
+                    className="text-slate-300 hover:text-indigo-400 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 rounded px-1 w-fit"
                   >
                     {link.name}
                   </a>
@@ -114,7 +128,7 @@ export default function Navbar({ onOpenBooking }: NavbarProps) {
                       setIsOpen(false);
                       onOpenBooking();
                     }}
-                    className="w-full py-3 bg-white text-slate-950 rounded-full font-sans text-xs font-extrabold uppercase tracking-widest text-center"
+                    className="w-full py-3 bg-white text-slate-950 rounded-full font-sans text-xs font-extrabold uppercase tracking-widest text-center focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     Work With Us
                   </button>

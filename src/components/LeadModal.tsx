@@ -70,20 +70,89 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
     "09:00 AM (EST)", "11:00 AM (EST)", "02:00 PM (EST)", "04:00 PM (EST)"
   ];
 
+  React.useEffect(() => {
+    if (isOpen) {
+      const previouslyFocused = document.activeElement as HTMLElement;
+      
+      // Auto-focus the close button or first input inside the modal
+      setTimeout(() => {
+        const firstInput = document.getElementById('client-name-input');
+        if (firstInput) {
+          firstInput.focus();
+        } else {
+          const closeBtn = document.getElementById('modal-close-btn');
+          if (closeBtn) closeBtn.focus();
+        }
+      }, 50);
+
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+          onClose();
+          return;
+        }
+
+        if (e.key === 'Tab') {
+          const modalEl = document.getElementById('lead-modal-content');
+          if (!modalEl) return;
+          
+          // Get all focusable elements inside the modal content
+          const focusableElements = modalEl.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+          );
+          if (focusableElements.length === 0) return;
+
+          const firstElement = focusableElements[0] as HTMLElement;
+          const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+          if (e.shiftKey) { // shift + tab
+            if (document.activeElement === firstElement) {
+              lastElement.focus();
+              e.preventDefault();
+            }
+          } else { // tab
+            if (document.activeElement === lastElement) {
+              firstElement.focus();
+              e.preventDefault();
+            }
+          }
+        }
+      };
+
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+        if (previouslyFocused && typeof previouslyFocused.focus === 'function') {
+          previouslyFocused.focus();
+        }
+      };
+    }
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-        {/* Backdrop close */}
-        <div className="absolute inset-0 cursor-pointer" onClick={onClose} />
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
+        {/* Backdrop close click listener */}
+        <div 
+          className="absolute inset-0 cursor-pointer" 
+          onClick={onClose} 
+          aria-hidden="true" 
+        />
         
         <motion.div 
+          id="lead-modal-content"
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ duration: 0.3 }}
-          className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-[#030712]/95 border border-white/10 shadow-2xl z-10 p-1"
+          className="relative w-full max-w-2xl overflow-hidden rounded-[32px] bg-[#030712]/95 border border-white/10 shadow-2xl z-10 p-1 focus:outline-none"
+          tabIndex={-1}
         >
           {/* Subtle gradient light flare */}
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -99,8 +168,9 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                 <span className="font-sans font-bold text-lg text-white tracking-tight">Ads<span className="text-indigo-400">Radiant</span></span>
               </div>
               <button 
+                id="modal-close-btn"
                 onClick={onClose}
-                className="p-1.5 rounded-full border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full border border-white/5 text-slate-400 hover:text-white hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors cursor-pointer"
                 aria-label="Close modal"
               >
                 <X className="w-5 h-5" />
@@ -117,7 +187,7 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                 <div className="w-16 h-16 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center mx-auto mb-6">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h3 className="font-sans text-2xl font-bold text-white tracking-tight mb-2">
+                <h3 id="modal-title" className="font-sans text-2xl font-bold text-white tracking-tight mb-2">
                   Growth Call Confirmed!
                 </h3>
                 <p className="text-slate-400 text-sm max-w-md mx-auto mb-6 leading-relaxed">
@@ -150,7 +220,7 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                 <div className="flex justify-center space-x-3">
                   <button 
                     onClick={onClose}
-                    className="px-6 py-2.5 bg-white text-slate-950 rounded-full text-[10px] font-extrabold uppercase tracking-widest hover:scale-105 shadow-xl shadow-white/5 cursor-pointer block"
+                    className="px-6 py-2.5 bg-white text-slate-950 rounded-full text-[10px] font-extrabold uppercase tracking-widest hover:scale-105 shadow-xl shadow-white/5 cursor-pointer block focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   >
                     Return to Portal
                   </button>
@@ -160,7 +230,7 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
               // FORM SCREEN
               <div>
                 <div className="mb-6 text-left">
-                  <h3 className="font-sans text-xl font-bold text-white tracking-tight">
+                  <h3 id="modal-title" className="font-sans text-xl font-bold text-white tracking-tight">
                     Schedule Your Free 30-Min App Growth Consultation
                   </h3>
                   <p className="text-[#94a3b8] text-xs mt-1">
@@ -169,7 +239,7 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                 </div>
 
                 {errorMsg && (
-                  <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center space-x-2 text-red-400 text-xs text-left">
+                  <div className="mb-4 p-3 bg-red-500/10 border border-red-500/30 rounded-lg flex items-center space-x-2 text-red-400 text-xs text-left" role="alert">
                     <AlertCircle className="w-4 h-4 flex-shrink-0" />
                     <span>{errorMsg}</span>
                   </div>
@@ -179,34 +249,36 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                   {/* Grid 1: Basic Info */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
                     <div>
-                      <label className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
+                      <label htmlFor="client-name-input" className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
                         Your Full Name *
                       </label>
                       <div className="relative">
                         <User className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
                         <input 
+                          id="client-name-input"
                           type="text" 
                           required
                           value={clientName}
                           onChange={(e) => setClientName(e.target.value)}
                           placeholder="e.g. Alex Rivera"
-                          className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 pl-10 pr-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
+                          className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 pl-10 pr-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
                         />
                       </div>
                     </div>
                     <div>
-                      <label className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
+                      <label htmlFor="client-email-input" className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
                         Work Email Address *
                       </label>
                       <div className="relative">
                         <Mail className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
                         <input 
+                          id="client-email-input"
                           type="email" 
                           required
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="e.g. alex@company.com"
-                          className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 pl-10 pr-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
+                          className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 pl-10 pr-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
                         />
                       </div>
                     </div>
@@ -215,27 +287,29 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                   {/* Grid 2: App details */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
                     <div>
-                      <label className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
+                      <label htmlFor="app-name-input" className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
                         App Name / Company URL
                       </label>
                       <input 
+                        id="app-name-input"
                         type="text" 
                         value={appName}
                         onChange={(e) => setAppName(e.target.value)}
                         placeholder="e.g. Serene Meditation App"
-                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
+                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
+                      <label htmlFor="app-category-input" className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
                         App Category / Niche
                       </label>
                       <input 
+                        id="app-category-input"
                         type="text" 
                         value={appCategory}
                         onChange={(e) => setAppCategory(e.target.value)}
                         placeholder="e.g. Health & Fitness / Subscription"
-                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
+                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
                       />
                     </div>
                   </div>
@@ -243,29 +317,31 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                   {/* Row 3: Audience and Budget */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left">
                     <div>
-                      <label className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
+                      <label htmlFor="app-audience-input" className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
                         Active Target Audience Profile
                       </label>
                       <input 
+                        id="app-audience-input"
                         type="text" 
                         value={targetAudience}
                         onChange={(e) => setTargetAudience(e.target.value)}
                         placeholder="e.g. US, Age 24-45, Interested in Wellness"
-                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
+                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 px-4 text-white text-xs placeholder:text-slate-600 focus:outline-none transition-colors"
                       />
                     </div>
                     <div>
-                      <label className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
+                      <label htmlFor="app-budget-select" className="block text-slate-400 text-[9px] font-mono uppercase tracking-wider mb-1.5">
                         Estimated Monthly User Acquisition Budget
                       </label>
                       <select 
+                        id="app-budget-select"
                         value={monthlyBudget} 
                         onChange={(e) => setMonthlyBudget(e.target.value)}
-                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 px-4 text-white text-xs focus:outline-none transition-colors"
+                        className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 px-4 text-white text-xs focus:outline-none transition-colors"
                       >
                         <option value="<$5,000">&lt; $5,000 / mo</option>
                         <option value="$5,000 - $15,000">$5,000 - $15,000 / mo</option>
-                        <option value="$15,000 - $50,050">$15,000 - $50,000 / mo</option>
+                        <option value="$15,000 - $50,050">$15,000 - $50,050 / mo</option>
                         <option value="$50,000+">$50,000+ / mo</option>
                       </select>
                     </div>
@@ -280,24 +356,26 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                       <div>
                         <div className="relative">
                           <Calendar className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-500" />
+                          <label htmlFor="meeting-date-input" className="sr-only">Meeting Date</label>
                           <input 
+                            id="meeting-date-input"
                             type="date"
                             required
                             min={new Date().toISOString().split('T')[0]}
                             value={meetingDate}
                             onChange={(e) => setMeetingDate(e.target.value)}
-                            className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 rounded-full py-2.5 pl-10 pr-4 text-white text-xs focus:outline-none transition-colors"
+                            className="w-full bg-[#030712] border border-white/10 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 rounded-full py-2.5 pl-10 pr-4 text-white text-xs focus:outline-none transition-colors"
                           />
                         </div>
                       </div>
                       <div>
-                        <div className="grid grid-cols-2 gap-1.5">
+                        <div className="grid grid-cols-2 gap-1.5" role="group" aria-label="Available meeting hours">
                           {currentSlots.map((slot) => (
                             <button
                               key={slot}
                               type="button"
                               onClick={() => setMeetingTime(slot)}
-                              className={`py-2 px-1 text-center rounded-full border text-[9px] uppercase font-bold transition-all cursor-pointer ${
+                              className={`py-2 px-1 text-center rounded-full border text-[9px] uppercase font-bold transition-all cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 ${
                                 meetingTime === slot 
                                 ? 'bg-white text-slate-950 border-white font-extrabold' 
                                 : 'bg-transparent border-white/5 text-slate-400 hover:text-white hover:border-white/10'
@@ -317,12 +395,10 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                       <span>GDPR Compliant. Under legal NDA automatically.</span>
                     </div>
 
-                    <motion.button 
-                      whileHover={{ scale: 1.04, boxShadow: "0 10px 25px rgba(255, 255, 255, 0.12)" }}
-                      whileTap={{ scale: 0.96 }}
+                    <button 
                       type="submit"
                       disabled={isLoading}
-                      className="px-6 py-2.5 bg-white text-slate-950 rounded-full text-[10px] font-extrabold uppercase tracking-widest cursor-pointer block sm:w-auto"
+                      className="px-6 py-2.5 bg-white text-slate-950 rounded-full text-[10px] font-extrabold uppercase tracking-widest cursor-pointer block sm:w-auto focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all hover:bg-slate-150"
                     >
                       {isLoading ? (
                         <div className="flex items-center space-x-1.5">
@@ -332,7 +408,7 @@ export default function LeadModal({ isOpen, onClose, prefillBudget }: LeadModalP
                       ) : (
                         <span>Confirm Advisory Booking</span>
                       )}
-                    </motion.button>
+                    </button>
                   </div>
                 </form>
               </div>

@@ -67,7 +67,13 @@ export default function CaseStudies({ onOpenBooking }: CaseStudiesProps) {
       <div className="max-w-7xl mx-auto space-y-12">
         
         {/* Header section */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-left">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col md:flex-row md:items-end justify-between gap-6 text-left"
+        >
           <div className="space-y-3">
             <span className="font-mono text-xs text-indigo-400 uppercase tracking-widest font-bold">
               validated app scaling records
@@ -113,13 +119,17 @@ export default function CaseStudies({ onOpenBooking }: CaseStudiesProps) {
               Lifestyle
             </button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Case Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {filteredCases.map((caseItem) => (
+          {filteredCases.map((caseItem, index) => (
             <motion.div
               key={caseItem.id}
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ 
                 y: -6, 
                 scale: 1.015,
@@ -127,7 +137,6 @@ export default function CaseStudies({ onOpenBooking }: CaseStudiesProps) {
                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                 boxShadow: "0 25px 45px rgba(0, 0, 0, 0.5)"
               }}
-              transition={{ type: "spring", stiffness: 220, damping: 18 }}
               className="group relative rounded-[32px] bg-white/5 border border-white/5 p-6 md:p-8 backdrop-blur-md transition-all duration-300 flex flex-col justify-between text-left cursor-default"
             >
               {/* Highlight badge overlay */}
@@ -167,7 +176,7 @@ export default function CaseStudies({ onOpenBooking }: CaseStudiesProps) {
                 <div className="grid grid-cols-3 gap-2 bg-[#030712]/60 p-3 rounded-2xl border border-white/5 font-mono text-center">
                   {caseItem.metrics.map((m, idx) => (
                     <div key={idx} className="space-y-0.5">
-                      <span className="block text:[14px] md:text-[16px] font-bold text-white tracking-tighter">
+                      <span className="block text-[14px] md:text-[16px] font-bold text-white tracking-tighter">
                         {m.value}
                       </span>
                       <span className="block text-[8px] text-slate-500 leading-tight">
@@ -236,7 +245,13 @@ export default function CaseStudies({ onOpenBooking }: CaseStudiesProps) {
         </div>
 
         {/* Global summary card block */}
-        <div className="relative rounded-[40px] bg-slate-900/40 border border-white/10 p-6 md:p-8 overflow-hidden backdrop-blur-xl max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-left">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="relative rounded-[40px] bg-slate-900/40 border border-white/10 p-6 md:p-8 overflow-hidden backdrop-blur-xl max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-left"
+        >
           <div className="space-y-2">
             <h4 className="text-white font-bold text-lg">Looking to scale beyond single-market boundaries?</h4>
             <p className="text-slate-400 text-xs max-w-xl">
@@ -244,13 +259,15 @@ export default function CaseStudies({ onOpenBooking }: CaseStudiesProps) {
             </p>
           </div>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(255,255,255,0.1)" }}
+            whileTap={{ scale: 0.95 }}
             onClick={onOpenBooking}
             className="px-6 py-2.5 bg-white text-slate-950 rounded-full text-[10px] font-extrabold uppercase tracking-widest hover:scale-105 shadow-xl shadow-white/5 cursor-pointer block shrink-0"
           >
             Review Custom Pilot Program
-          </button>
-        </div>
+          </motion.button>
+        </motion.div>
       </div>
     </div>
   );

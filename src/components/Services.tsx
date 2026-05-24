@@ -45,10 +45,10 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             
             <div className="flex gap-2 z-10">
               <div className="w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 shadow-lg">
-                <Users className="w-4 h-4 animate-pulse" />
+                <Target className="w-4 h-4 animate-pulse" />
               </div>
               <div className="w-9 h-9 rounded-xl bg-cyan-600/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 shadow-lg">
-                <Target className="w-4 h-4" />
+                <Users className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
       illustration: (
         <div className="relative w-full h-44 rounded-2xl bg-slate-950/60 border border-white/5 overflow-hidden flex items-center justify-center p-4 group-hover:border-indigo-500/20 transition-colors">
           <div className="absolute inset-0 bg-[radial-gradient(#ffffff03_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-          <div className="relative w-full h-full flex flex-col justify-center">
+          <div className="relative w-full h-full flex flex-col justify-center font-sans">
             {/* Dynamic graph nodes representation */}
             <div className="absolute left-10 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg bg-indigo-600/15 border border-indigo-500/25 flex items-center justify-center text-indigo-400">
               <Layers className="w-4 h-4" />
@@ -74,8 +74,8 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             </div>
             
             {/* Connection beam line */}
-            <div className="absolute inset-x-12 top-1/2 h-0.5 bg-gradient-to-r from-indigo-500/25 via-cyan-500/20 to-cyan-500/25 flex items-center justify-center">
-              <div className="w-2 h-2 rounded-full bg-cyan-400 animate-[ping_1.5s_infinite] shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+            <div className="absolute inset-x-16 top-1/2 h-0.5 bg-gradient-to-r from-indigo-500/20 to-cyan-500/20 flex items-center justify-center">
+              <div className="w-2 h-2 rounded-full bg-indigo-400 animate-ping" />
             </div>
             
             <div className="mt-14 text-center">
@@ -149,7 +149,13 @@ export default function Services({ onOpenBooking }: ServicesProps) {
       <div className="max-w-7xl mx-auto space-y-16">
         
         {/* Core Title Section */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center max-w-3xl mx-auto space-y-4"
+        >
           <span className="font-mono text-xs text-indigo-450 uppercase tracking-widest font-bold block">
             CORE CAPABILITIES & SOLUTIONS
           </span>
@@ -159,13 +165,17 @@ export default function Services({ onOpenBooking }: ServicesProps) {
           <p className="text-slate-450 text-sm max-w-2xl mx-auto leading-relaxed">
             We don't just 'manage campaigns.' We construct modular, full-funnel acquisition, creative, and analytics systems designed to compound metrics and lower customer acquisition cost.
           </p>
-        </div>
+        </motion.div>
 
         {/* Dynamic Service Grid Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {servicesData.map((service, index) => (
             <motion.div
               key={service.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, delay: index * 0.12, ease: [0.16, 1, 0.3, 1] }}
               whileHover={{ 
                 y: -6, 
                 scale: 1.015,
@@ -173,7 +183,6 @@ export default function Services({ onOpenBooking }: ServicesProps) {
                 backgroundColor: "rgba(255, 255, 255, 0.08)",
                 boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)"
               }}
-              transition={{ type: "spring", stiffness: 220, damping: 18 }}
               className="group relative rounded-3xl bg-white/5 border border-white/5 p-6 md:p-8 backdrop-blur-md transition-all duration-300 flex flex-col justify-between text-left cursor-default space-y-6 overflow-hidden"
             >
               {/* Card top flare */}
@@ -211,7 +220,13 @@ export default function Services({ onOpenBooking }: ServicesProps) {
         </div>
 
         {/* Dynamic ROI Estimator Tool Widget (Conversion Magnet) */}
-        <div className="relative rounded-[40px] bg-slate-900/40 border border-white/10 p-6 md:p-8 overflow-hidden backdrop-blur-xl max-w-5xl mx-auto">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="relative rounded-[40px] bg-slate-900/40 border border-white/10 p-6 md:p-8 overflow-hidden backdrop-blur-xl max-w-5xl mx-auto"
+        >
           {/* Inner ambient glow */}
           <div className="absolute top-[-50px] right-[-50px] w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
           
@@ -335,7 +350,7 @@ export default function Services({ onOpenBooking }: ServicesProps) {
             </div>
 
           </div>
-        </div>
+        </motion.div>
 
       </div>
     </div>

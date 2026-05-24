@@ -212,7 +212,13 @@ export default function ContactSection() {
       <div className="max-w-7xl mx-auto relative z-15">
         
         {/* Module Header */}
-        <div className="text-center md:text-left mb-16 space-y-4 max-w-3xl">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center md:text-left mb-16 space-y-4 max-w-3xl"
+        >
           <div className="inline-flex items-center space-x-1 px-3.5 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-xs font-mono uppercase tracking-wider rounded-full">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Contact Headquarters</span>
@@ -223,13 +229,19 @@ export default function ContactSection() {
           <p className="text-slate-400 text-sm md:text-base max-w-xl">
             Want to talk numbers, explore localized user acquisition opportunities, or secure an NDA? Reach out directly.
           </p>
-        </div>
+        </motion.div>
 
         {/* Info Grid Split: Left details, Right message box */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
           {/* Left Column: Direct coordinates */}
-          <div className="lg:col-span-5 space-y-10 text-left">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 space-y-10 text-left"
+          >
             
             <div className="space-y-4">
               <h3 className="text-xl font-bold text-white tracking-tight">
@@ -331,11 +343,16 @@ export default function ContactSection() {
                 </div>
               </div>
             </div>
-
-          </div>
+          </motion.div>
 
           {/* Right Column: Interaction Form */}
-          <div className="lg:col-span-7">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7"
+          >
             <div className="bg-white/5 border border-white/5 rounded-[24px] p-6 md:p-8 relative overflow-hidden">
               <div className="space-y-2 text-left mb-8">
                 <h3 className="text-xl font-bold text-white tracking-tight">
@@ -590,7 +607,7 @@ export default function ContactSection() {
 
               </form>
             </div>
-          </div>
+          </motion.div>
 
         </div>
 
